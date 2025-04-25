@@ -176,11 +176,12 @@ export default function Home() {
   };
 
   const filteredPosts = searchText
-    ? posts.filter((post) =>
-        post.tags.some((tag) =>
-          tag.toLowerCase().includes(searchText.toLowerCase())
-        )
-      )
+    ? posts.filter((post) => {
+        const searchTags = searchText.toLowerCase().split(',').map(tag => tag.trim());
+        return searchTags.every(searchTag =>
+          post.tags.some(tag => tag.toLowerCase().includes(searchTag))
+        );
+      })
     : posts;
 
   return (
