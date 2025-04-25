@@ -40,8 +40,8 @@ export default function Home() {
   const [searchText, setSearchText] = useState("");
 	const { toast } = useToast()
 
+  // Load posts from local storage on component mount
   useEffect(() => {
-    // Load posts from local storage on component mount
     const storedPosts = localStorage.getItem('posts');
     if (storedPosts) {
       setPosts(JSON.parse(storedPosts));
@@ -79,7 +79,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Save posts to local storage whenever posts state changes
     localStorage.setItem('posts', JSON.stringify(posts));
   }, [posts]);
 
@@ -130,11 +129,22 @@ export default function Home() {
     };
 
     setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === postId
-          ? { ...post, comments: [...post.comments, newComment] }
-          : post
-      )
+      prevPosts.map((post) => {
+        if (post.id === postId) {
+          const updatedPost = {
+            ...post,
+            comments: [...post.comments, newComment],
+          };
+
+          // Update commentInput state and localStorage
+          const updatedCommentInput = { ...commentInput, [postId]: "" };
+          setCommentInput(updatedCommentInput);
+          localStorage.setItem('commentInput', JSON.stringify(updatedCommentInput));
+
+          return updatedPost;
+        }
+        return post;
+      })
     );
   };
 
@@ -147,6 +157,19 @@ export default function Home() {
   };
 
   const [commentInput, setCommentInput] = useState<Record<string, string>>({});
+
+	// Load comment input from local storage
+	useEffect(() => {
+		const storedCommentInput = localStorage.getItem('commentInput');
+		if (storedCommentInput) {
+			setCommentInput(JSON.parse(storedCommentInput));
+		}
+	}, []);
+
+	// Save comment input to local storage
+	useEffect(() => {
+		localStorage.setItem('commentInput', JSON.stringify(commentInput));
+	}, [commentInput]);
 
   const handleCommentInputChange = (postId: string, content: string) => {
     setCommentInput((prev) => ({ ...prev, [postId]: content }));
