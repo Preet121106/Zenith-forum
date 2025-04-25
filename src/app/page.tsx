@@ -232,6 +232,18 @@ export default function Home() {
       </motion.h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Banner Section */}
+        <motion.div
+          className="md:col-span-3 text-center py-4 bg-secondary rounded-md shadow-md fade-in mb-6"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          <p className="text-secondary-foreground text-sm">
+            Welcome to Discussions! Share your thoughts, ideas, and engage in meaningful conversations.
+          </p>
+        </motion.div>
+
         {/* Post Creation */}
         <motion.div
           className="md:col-span-1"
@@ -239,7 +251,7 @@ export default function Home() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Card className="mb-6 bg-white shadow-md rounded-lg border-glow">
+          <Card className="mb-6 bg-white dark:bg-gray-800 shadow-md rounded-lg border-glow">
             <CardHeader className="flex flex-col space-y-2">
               <Label htmlFor="author">
                 <div className="flex items-center space-x-2">
@@ -314,11 +326,11 @@ export default function Home() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <Card key={post.id} className="mb-6 bg-white shadow-md rounded-lg border-glow">
+                  <Card key={post.id} className="mb-6 bg-white dark:bg-gray-800 shadow-md rounded-lg border-glow">
                     <CardHeader className="flex flex-col">
                       <div className="flex items-center space-x-2">
                         <BrainCircuit className="h-4 w-4 mr-2" />
-                        <span>Zenith User</span>
+                        <span className="text-sm font-bold">Zenith User</span>
                       </div>
                       <div className="text-sm text-muted-foreground">
                         {formatDistanceToNow(new Date(post.timestamp), {
@@ -341,7 +353,7 @@ export default function Home() {
                     <CardContent>
                       <h2 className="text-xl font-bold mb-2">{post.title}</h2> {/* Display Post Title */}
                       <p className="mb-4">{post.content}</p>
-                      <div className="flex items-center mt-4 bg-muted p-2 rounded-md">
+                      <div className="flex items-center mt-4 rounded-md p-2 bg-gray-100 dark:bg-gray-700">
                         <Button
                           variant="ghost"
                           size="sm"
@@ -427,3 +439,4 @@ export default function Home() {
     </div>
   );
 }
+
