@@ -10,6 +10,7 @@ import { Heart, MessageSquare, Share2, Filter, BrainCircuit } from 'lucide-react
 import { formatDistanceToNow } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from "@/hooks/use-toast"
+import { cn } from "@/lib/utils"
 
 interface Post {
   id: string;
@@ -363,3 +364,4 @@ export default function Home() {
     </div>
   );
 }
+
