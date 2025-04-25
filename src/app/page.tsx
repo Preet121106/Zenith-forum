@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -252,7 +252,7 @@ export default function Home() {
               placeholder="Search by tags..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="rounded-md pr-10"
+              className="rounded-md pr-10 border-2"
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
               <Filter className="h-5 w-5 text-muted-foreground" />
@@ -377,3 +377,4 @@ export default function Home() {
     </div>
   );
 }
+
