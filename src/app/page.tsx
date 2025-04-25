@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Heart, MessageSquare, Share2, Filter, BrainCircuit } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -324,6 +324,8 @@ export default function Home() {
                         {formatDistanceToNow(new Date(post.timestamp), {
                           addSuffix: true,
                         })}
+                        <br />
+                        {format(new Date(post.timestamp), 'yyyy-MM-dd HH:mm:ss')}
                       </div>
                       <div>
                         {post.tags.map((tag) => (
@@ -385,6 +387,8 @@ export default function Home() {
                                 {formatDistanceToNow(new Date(comment.timestamp), {
                                   addSuffix: true,
                                 })}
+                                  <br />
+                                  {format(new Date(comment.timestamp), 'yyyy-MM-dd HH:mm:ss')}
                               </div>
                               <p className="text-sm mt-1">{comment.content}</p>
                             </motion.div>
