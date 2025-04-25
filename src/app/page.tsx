@@ -341,7 +341,7 @@ export default function Home() {
                     <CardContent>
                       <h2 className="text-xl font-bold mb-2">{post.title}</h2> {/* Display Post Title */}
                       <p className="mb-4">{post.content}</p>
-                      <div className="flex items-center mt-4">
+                      <div className="flex items-center mt-4 bg-muted p-2 rounded-md">
                         <Button
                           variant="ghost"
                           size="sm"
