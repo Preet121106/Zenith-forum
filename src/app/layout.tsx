@@ -4,6 +4,7 @@ import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
+import ThemeToggle from "@/components/theme-toggle"
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -29,11 +30,17 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-          <Toaster />
+          <div className="relative flex min-h-screen flex-col">
+            <div className="absolute right-4 top-4 md:right-8 md:top-8">
+              <ThemeToggle />
+            </div>
+            {children}
+            <Toaster />
+          </div>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+
 
