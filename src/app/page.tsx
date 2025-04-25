@@ -208,7 +208,7 @@ export default function Home() {
               <Label htmlFor="author">
                 <div className="flex items-center space-x-2">
                   <BrainCircuit className="h-4 w-4" />
-                  <span>Author</span>
+                  <span>Tags</span>
                 </div>
               </Label>
               <Input
@@ -230,7 +230,7 @@ export default function Home() {
               />
               <Button
                 onClick={handleCreatePost}
-                className="bg-primary text-primary-foreground hover:bg-primary/80 rounded-md"
+                className="bg-primary text-primary-foreground hover:bg-primary/80 rounded-md shadow-glow"
               >
                 Create Post
               </Button>
@@ -272,7 +272,7 @@ export default function Home() {
                   <Card key={post.id} className="mb-6 bg-white shadow-md rounded-lg border-glow">
                     <CardHeader className="flex flex-col">
                       <div className="flex items-center space-x-2">
-                        <BrainCircuit className="h-4 w-4" />
+                        <BrainCircuit className="h-4 w-4 mr-2" />
                         <span>Zenith User</span>
                       </div>
                       <div className="text-sm text-muted-foreground">
@@ -298,12 +298,12 @@ export default function Home() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleLikePost(post.id)}
-                          className="mr-3 rounded-md"
+                          className="mr-3 rounded-md shadow-glow"
                         >
                           <Heart className="h-4 w-4 mr-1" />
                           Like ({post.likes})
                         </Button>
-                        <Button variant="ghost" size="sm" className="mr-3 rounded-md">
+                        <Button variant="ghost" size="sm" className="mr-3 rounded-md shadow-glow">
                           <MessageSquare className="h-4 w-4 mr-1" />
                           {post.comments.length} Comments
                         </Button>
@@ -311,7 +311,7 @@ export default function Home() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleSharePost(post.id)}
-                          className="rounded-md"
+                          className="rounded-md shadow-glow"
                         >
                           <Share2 className="h-4 w-4 mr-1" />
                           Share
@@ -332,7 +332,7 @@ export default function Home() {
                               className="mb-3 p-3 rounded-md bg-muted shadow-glow"
                             >
                               <div className="flex items-center space-x-2">
-                                <BrainCircuit className="h-4 w-4" />
+                                <BrainCircuit className="h-4 w-4 mr-2" />
                                 <span className="text-xs font-bold">Zenith User</span>
                               </div>
                               <div className="text-xs text-muted-foreground">
@@ -359,7 +359,7 @@ export default function Home() {
                             onClick={() =>
                               handleAddComment(post.id, commentInput[post.id] || "")
                             }
-                            className="bg-primary text-primary-foreground hover:bg-primary/80 rounded-md text-sm"
+                            className="bg-primary text-primary-foreground hover:bg-primary/80 rounded-md text-sm shadow-glow"
                             size="sm"
                           >
                             Add Comment
@@ -377,4 +377,3 @@ export default function Home() {
     </div>
   );
 }
-
