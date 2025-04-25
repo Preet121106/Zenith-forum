@@ -35,10 +35,11 @@ function generateRandomId(): string {
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [newPostContent, setNewPostContent] = useState("");
-  const [newPostAuthor, setNewPostAuthor] = useState("Zenith User");
+  const [newPostAuthor, setNewPostAuthor] = useState("");
   const [newPostTags, setNewPostTags] = useState("");
   const [searchText, setSearchText] = useState("");
 	const { toast } = useToast()
+  const [userCount, setUserCount] = useState(1);
 
   // Load posts from local storage on component mount
   useEffect(() => {
@@ -50,8 +51,8 @@ export default function Home() {
       const initialPosts: Post[] = [
         {
           id: generateRandomId(),
-          author: "Zenith User",
-          content: "First post! Welcome to Zenith Echo!",
+          author: "Zenith User 1",
+          content: "First post! Welcome to Discussions!",
           timestamp: new Date().toISOString(),
           likes: 0,
           comments: [],
@@ -59,14 +60,14 @@ export default function Home() {
         },
         {
           id: generateRandomId(),
-          author: "Zenith User",
+          author: "Zenith User 2",
           content: "Sharing my thoughts on the latest tech trends.",
           timestamp: new Date().toISOString(),
           likes: 2,
           comments: [
             {
               id: generateRandomId(),
-              author: "Zenith User",
+              author: "Zenith User 3",
               content: "Interesting!",
               timestamp: new Date().toISOString(),
             },
@@ -95,10 +96,12 @@ export default function Home() {
 
 
     const tagsArray = newPostTags.split(",").map((tag) => tag.trim());
+    const author = `Zenith User ${userCount}`;
+    setUserCount(userCount + 1);
 
     const newPost: Post = {
       id: generateRandomId(),
-      author: newPostAuthor,
+      author: author,
       content: newPostContent,
       timestamp: new Date().toISOString(),
       likes: 0,
@@ -124,10 +127,11 @@ export default function Home() {
 
     const newComment: Comment = {
       id: generateRandomId(),
-      author: "Zenith User",
+      author: `Zenith User ${userCount}`,
       content: commentContent,
       timestamp: new Date().toISOString(),
     };
+    setUserCount(userCount + 1);
 
     setPosts((prevPosts) =>
       prevPosts.map((post) => {
@@ -181,7 +185,10 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-5 text-center">Zenith Echo</h1>
+      <h1 className="text-3xl font-bold mb-5 text-center flex items-center justify-center text-primary">
+        <BrainCircuit className="h-6 w-6 mr-2" />
+        Discussions
+      </h1>
 
       {/* Post Creation */}
       <Card className="mb-6 bg-white shadow-md rounded-lg">
@@ -189,7 +196,7 @@ export default function Home() {
           <Label htmlFor="author">
             <div className="flex items-center space-x-2">
               <BrainCircuit className="h-4 w-4" />
-              <span>Zenith User</span>
+              <span>Author</span>
             </div>
           </Label>
           <Input
@@ -254,7 +261,7 @@ export default function Home() {
                 <CardHeader className="flex flex-col">
                   <div className="flex items-center space-x-2">
                     <BrainCircuit className="h-4 w-4" />
-                    <span>Zenith User</span>
+                    <span>{post.author}</span>
                   </div>
                   <div className="text-sm text-muted-foreground">
                     {formatDistanceToNow(new Date(post.timestamp), {
@@ -314,7 +321,7 @@ export default function Home() {
                         >
                           <div className="flex items-center space-x-2">
                             <BrainCircuit className="h-4 w-4" />
-                            <span className="text-xs font-bold">Zenith User</span>
+                            <span className="text-xs font-bold">{comment.author}</span>
                           </div>
                           <div className="text-xs text-muted-foreground">
                             {formatDistanceToNow(new Date(comment.timestamp), {
