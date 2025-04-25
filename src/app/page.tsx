@@ -164,11 +164,31 @@ export default function Home() {
   };
 
   const handleSharePost = (postId: string) => {
-    const postUrl = `${window.location.origin}/post/${postId}`;
-    navigator.clipboard.writeText(postUrl);
-		toast({
-			description: "Post link copied to clipboard!",
-		})
+    const post = posts.find(post => post.id === postId);
+    if (!post) {
+      toast({
+        title: "Error",
+        description: "Post not found for sharing.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const textToCopy = `${post.title}\n${post.content}`;
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        toast({
+          description: "Post title and content copied to clipboard!",
+        });
+      })
+      .catch(err => {
+        toast({
+          title: "Error",
+          description: "Failed to copy post to clipboard.",
+          variant: "destructive",
+        });
+        console.error("Could not copy text: ", err);
+      });
   };
 
   const [commentInput, setCommentInput] = useState<Record<string, string>>({});
@@ -403,3 +423,4 @@ export default function Home() {
     </div>
   );
 }
+
