@@ -178,7 +178,7 @@ export default function Home() {
     navigator.clipboard.writeText(textToCopy)
       .then(() => {
         toast({
-          description: "Post title and content copied to clipboard!",
+          description: "Post title and content copied, hurray! 🥹",
         });
       })
       .catch(err => {
@@ -423,5 +423,3 @@ export default function Home() {
     </div>
   );
 }
-
-
