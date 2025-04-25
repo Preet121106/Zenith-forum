@@ -50,7 +50,7 @@ export default function Home() {
       const initialPosts: Post[] = [
         {
           id: generateRandomId(),
-          author: "Zenith User 1",
+          author: "Zenith User",
           content: "First post! Welcome to Zenith Echo!",
           timestamp: new Date().toISOString(),
           likes: 0,
@@ -59,14 +59,14 @@ export default function Home() {
         },
         {
           id: generateRandomId(),
-          author: "Zenith User 2",
+          author: "Zenith User",
           content: "Sharing my thoughts on the latest tech trends.",
           timestamp: new Date().toISOString(),
           likes: 2,
           comments: [
             {
               id: generateRandomId(),
-              author: "Zenith User 1",
+              author: "Zenith User",
               content: "Interesting!",
               timestamp: new Date().toISOString(),
             },
@@ -252,7 +252,10 @@ export default function Home() {
             >
               <Card key={post.id} className="mb-6 bg-white shadow-md rounded-lg">
                 <CardHeader className="flex flex-col">
-                  <div className="font-bold">{post.author}</div>
+                  <div className="flex items-center space-x-2">
+                    <BrainCircuit className="h-4 w-4" />
+                    <span>Zenith User</span>
+                  </div>
                   <div className="text-sm text-muted-foreground">
                     {formatDistanceToNow(new Date(post.timestamp), {
                       addSuffix: true,
@@ -309,7 +312,10 @@ export default function Home() {
                           transition={{ duration: 0.1 }}
                           className="mb-3 p-3 rounded-md bg-muted"
                         >
-                          <div className="text-xs font-bold">{comment.author}</div>
+                          <div className="flex items-center space-x-2">
+                            <BrainCircuit className="h-4 w-4" />
+                            <span className="text-xs font-bold">Zenith User</span>
+                          </div>
                           <div className="text-xs text-muted-foreground">
                             {formatDistanceToNow(new Date(comment.timestamp), {
                               addSuffix: true,
@@ -350,4 +356,3 @@ export default function Home() {
     </div>
   );
 }
-
