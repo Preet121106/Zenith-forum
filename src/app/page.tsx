@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Heart, MessageSquare, Share2 } from 'lucide-react';
+import { Heart, MessageSquare, Share2, Filter } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from "@/hooks/use-toast"
@@ -75,6 +75,7 @@ export default function Home() {
         },
       ];
       setPosts(initialPosts);
+      localStorage.setItem('posts', JSON.stringify(initialPosts));
     }
   }, []);
 
@@ -135,11 +136,6 @@ export default function Home() {
             ...post,
             comments: [...post.comments, newComment],
           };
-
-          // Update commentInput state and localStorage
-          const updatedCommentInput = { ...commentInput, [postId]: "" };
-          setCommentInput(updatedCommentInput);
-          localStorage.setItem('commentInput', JSON.stringify(updatedCommentInput));
 
           return updatedPost;
         }
@@ -225,13 +221,18 @@ export default function Home() {
       </Card>
 
       {/* Search Input */}
-      <Input
-        type="text"
-        placeholder="Search by tags..."
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        className="mb-4 rounded-md"
-      />
+      <div className="relative">
+        <Input
+          type="text"
+          placeholder="Search by tags..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="mb-4 rounded-md pr-10"
+        />
+        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+          <Filter className="h-5 w-5 text-muted-foreground" />
+        </div>
+      </div>
 
       {/* Post Display */}
       <div>
