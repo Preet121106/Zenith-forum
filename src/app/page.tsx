@@ -240,7 +240,7 @@ export default function Home() {
           transition={{ duration: 0.4, delay: 0.1 }}
         >
           <p className="text-secondary-foreground text-sm">
-            Welcome to Discussions! Share your thoughts, ideas, and engage in meaningful conversations.
+            Welcome to Zenith 🎉 ! Get solutions for your doubts and get productive today.
           </p>
         </motion.div>
 
