@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -8,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Heart, MessageSquare, Share2 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Post {
   id: string;
@@ -35,6 +36,7 @@ export default function Home() {
   const [newPostContent, setNewPostContent] = useState("");
   const [newPostAuthor, setNewPostAuthor] = useState("Zenith User");
   const [newPostTags, setNewPostTags] = useState("");
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     // Mock data for initial posts
@@ -127,20 +129,28 @@ export default function Home() {
     setCommentInput((prev) => ({ ...prev, [postId]: content }));
   };
 
+  const filteredPosts = searchText
+    ? posts.filter((post) =>
+        post.tags.some((tag) =>
+          tag.toLowerCase().includes(searchText.toLowerCase())
+        )
+      )
+    : posts;
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Zenith Echo</h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-5 text-center">Zenith Echo</h1>
 
       {/* Post Creation */}
-      <Card className="mb-4 bg-white">
-        <CardHeader>
+      <Card className="mb-6 bg-white shadow-md rounded-lg">
+        <CardHeader className="flex flex-col space-y-2">
           <Label htmlFor="author">Zenith User</Label>
           <Input
             id="author"
             type="text"
             value={newPostAuthor}
             onChange={(e) => setNewPostAuthor(e.target.value)}
-            className="mb-2"
+            className="mb-3 rounded-md"
           />
           <Label htmlFor="tags">Tags (comma-separated)</Label>
           <Input
@@ -148,7 +158,7 @@ export default function Home() {
             type="text"
             value={newPostTags}
             onChange={(e) => setNewPostTags(e.target.value)}
-            className="mb-2"
+            className="mb-3 rounded-md"
           />
         </CardHeader>
         <CardContent>
@@ -157,93 +167,133 @@ export default function Home() {
             id="content"
             value={newPostContent}
             onChange={(e) => setNewPostContent(e.target.value)}
-            className="mb-2"
+            className="mb-3 rounded-md"
           />
-          <Button onClick={handleCreatePost} className="bg-primary text-primary-foreground hover:bg-primary/80">
+          <Button
+            onClick={handleCreatePost}
+            className="bg-primary text-primary-foreground hover:bg-primary/80 rounded-md"
+          >
             Create Post
           </Button>
         </CardContent>
       </Card>
 
+      {/* Search Input */}
+      <Input
+        type="text"
+        placeholder="Search by tags..."
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        className="mb-4 rounded-md"
+      />
+
       {/* Post Display */}
       <div>
-        {posts.map((post) => (
-          <Card key={post.id} className="mb-4 bg-white">
-            <CardHeader>
-              <div className="font-bold">{post.author}</div>
-              <div className="text-sm text-muted-foreground">
-                {new Date(post.timestamp).toLocaleString()}
-              </div>
-              <div>
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground mr-2"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p>{post.content}</p>
-              <div className="flex items-center mt-4">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleLikePost(post.id)}
-                  className="mr-2"
-                >
-                  <Heart className="h-4 w-4 mr-1" />
-                  Like ({post.likes})
-                </Button>
-                <Button variant="ghost" size="sm" className="mr-2">
-                  <MessageSquare className="h-4 w-4 mr-1" />
-                  {post.comments.length} Comments
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => handleSharePost(post.id)}>
-                  <Share2 className="h-4 w-4 mr-1" />
-                  Share
-                </Button>
-              </div>
-
-              {/* Comments Section */}
-              <div className="mt-4">
-                <h3 className="text-sm font-bold mb-2">Comments</h3>
-                {post.comments.map((comment) => (
-                  <div key={comment.id} className="mb-2 p-2 rounded-md bg-muted">
-                    <div className="text-xs font-bold">{comment.author}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {new Date(comment.timestamp).toLocaleString()}
-                    </div>
-                    <p className="text-sm">{comment.content}</p>
+        <AnimatePresence>
+          {filteredPosts.map((post) => (
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Card key={post.id} className="mb-6 bg-white shadow-md rounded-lg">
+                <CardHeader className="flex flex-col">
+                  <div className="font-bold">{post.author}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {formatDistanceToNow(new Date(post.timestamp), {
+                      addSuffix: true,
+                    })}
                   </div>
-                ))}
+                  <div>
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="inline-flex items-center rounded-full bg-secondary px-3 py-1 mt-2 text-xs font-medium text-secondary-foreground mr-2"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="mb-4">{post.content}</p>
+                  <div className="flex items-center mt-4">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleLikePost(post.id)}
+                      className="mr-3 rounded-md"
+                    >
+                      <Heart className="h-4 w-4 mr-1" />
+                      Like ({post.likes})
+                    </Button>
+                    <Button variant="ghost" size="sm" className="mr-3 rounded-md">
+                      <MessageSquare className="h-4 w-4 mr-1" />
+                      {post.comments.length} Comments
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleSharePost(post.id)}
+                      className="rounded-md"
+                    >
+                      <Share2 className="h-4 w-4 mr-1" />
+                      Share
+                    </Button>
+                  </div>
 
-                {/* Add Comment Input */}
-                <div className="mt-2">
-                  <Textarea
-                    value={commentInput[post.id] || ""}
-                    onChange={(e) =>
-                      handleCommentInputChange(post.id, e.target.value)
-                    }
-                    placeholder="Add a comment..."
-                    className="mb-2 text-sm"
-                  />
-                  <Button
-                    onClick={() =>
-                      handleAddComment(post.id, commentInput[post.id] || "")
-                    }
-                    className="bg-primary text-primary-foreground hover:bg-primary/80 text-sm"
-                    size="sm"
-                  >
-                    Add Comment
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                  {/* Comments Section */}
+                  <div className="mt-5">
+                    <h3 className="text-sm font-bold mb-3">Comments</h3>
+                    <AnimatePresence>
+                      {post.comments.map((comment) => (
+                        <motion.div
+                          key={comment.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.1 }}
+                          className="mb-3 p-3 rounded-md bg-muted"
+                        >
+                          <div className="text-xs font-bold">{comment.author}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {formatDistanceToNow(new Date(comment.timestamp), {
+                              addSuffix: true,
+                            })}
+                          </div>
+                          <p className="text-sm mt-1">{comment.content}</p>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+
+                    {/* Add Comment Input */}
+                    <div className="mt-3">
+                      <Textarea
+                        value={commentInput[post.id] || ""}
+                        onChange={(e) =>
+                          handleCommentInputChange(post.id, e.target.value)
+                        }
+                        placeholder="Add a comment..."
+                        className="mb-3 text-sm rounded-md"
+                      />
+                      <Button
+                        onClick={() =>
+                          handleAddComment(post.id, commentInput[post.id] || "")
+                        }
+                        className="bg-primary text-primary-foreground hover:bg-primary/80 rounded-md text-sm"
+                        size="sm"
+                      >
+                        Add Comment
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );
