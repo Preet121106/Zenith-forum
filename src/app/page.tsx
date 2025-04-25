@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils"
 interface Post {
   id: string;
   author: string;
+  title: string; // Added title field
   content: string;
   timestamp: string;
   likes: number;
@@ -35,6 +36,7 @@ function generateRandomId(): string {
 
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [newPostTitle, setNewPostTitle] = useState(""); // State for post title
   const [newPostContent, setNewPostContent] = useState("");
   const [newPostTags, setNewPostTags] = useState("");
   const [searchText, setSearchText] = useState("");
@@ -52,6 +54,7 @@ export default function Home() {
         {
           id: generateRandomId(),
           author: "Zenith User 1",
+          title: "Welcome to Discussions!", // Added title
           content: "First post! Welcome to Discussions!",
           timestamp: new Date().toISOString(),
           likes: 0,
@@ -61,6 +64,7 @@ export default function Home() {
         {
           id: generateRandomId(),
           author: "Zenith User 2",
+          title: "Latest Tech Trends", // Added title
           content: "Sharing my thoughts on the latest tech trends.",
           timestamp: new Date().toISOString(),
           likes: 2,
@@ -85,6 +89,15 @@ export default function Home() {
   }, [posts]);
 
   const handleCreatePost = () => {
+    if (newPostTitle.trim() === "") {
+			toast({
+				title: "Error",
+				description: "Post title cannot be empty.",
+				variant: "destructive",
+			})
+			return;
+		}
+
     if (newPostContent.trim() === "") {
 			toast({
 				title: "Error",
@@ -102,6 +115,7 @@ export default function Home() {
     const newPost: Post = {
       id: generateRandomId(),
       author: author,
+      title: newPostTitle, // Assign title
       content: newPostContent,
       timestamp: new Date().toISOString(),
       likes: 0,
@@ -110,6 +124,7 @@ export default function Home() {
     };
 
     setPosts([newPost, ...posts]);
+    setNewPostTitle(""); // Clear title input
     setNewPostContent("");
     setNewPostTags("");
   };
@@ -222,6 +237,15 @@ export default function Home() {
               />
             </CardHeader>
             <CardContent>
+              <Label htmlFor="title">Post Title</Label>
+              <Input
+                id="title"
+                type="text"
+                value={newPostTitle}
+                onChange={(e) => setNewPostTitle(e.target.value)}
+                className="mb-3 rounded-md"
+                placeholder="Enter post title"
+              />
               <Label htmlFor="content">Post Content</Label>
               <Textarea
                 id="content"
@@ -293,6 +317,7 @@ export default function Home() {
                       </div>
                     </CardHeader>
                     <CardContent>
+                      <h2 className="text-xl font-bold mb-2">{post.title}</h2> {/* Display Post Title */}
                       <p className="mb-4">{post.content}</p>
                       <div className="flex items-center mt-4">
                         <Button
