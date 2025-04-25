@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Heart, MessageSquare, Share2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useToast } from "@/hooks/use-toast"
 
 interface Post {
   id: string;
@@ -37,41 +38,61 @@ export default function Home() {
   const [newPostAuthor, setNewPostAuthor] = useState("Zenith User");
   const [newPostTags, setNewPostTags] = useState("");
   const [searchText, setSearchText] = useState("");
+	const { toast } = useToast()
 
   useEffect(() => {
-    // Mock data for initial posts
-    const initialPosts: Post[] = [
-      {
-        id: generateRandomId(),
-        author: "Zenith User 1",
-        content: "First post! Welcome to Zenith Echo!",
-        timestamp: new Date().toISOString(),
-        likes: 0,
-        comments: [],
-        tags: ["welcome", "first"],
-      },
-      {
-        id: generateRandomId(),
-        author: "Zenith User 2",
-        content: "Sharing my thoughts on the latest tech trends.",
-        timestamp: new Date().toISOString(),
-        likes: 2,
-        comments: [
-          {
-            id: generateRandomId(),
-            author: "Zenith User 1",
-            content: "Interesting!",
-            timestamp: new Date().toISOString(),
-          },
-        ],
-        tags: ["tech", "trends"],
-      },
-    ];
-    setPosts(initialPosts);
+    // Load posts from local storage on component mount
+    const storedPosts = localStorage.getItem('posts');
+    if (storedPosts) {
+      setPosts(JSON.parse(storedPosts));
+    } else {
+      // Mock data for initial posts if no data in local storage
+      const initialPosts: Post[] = [
+        {
+          id: generateRandomId(),
+          author: "Zenith User 1",
+          content: "First post! Welcome to Zenith Echo!",
+          timestamp: new Date().toISOString(),
+          likes: 0,
+          comments: [],
+          tags: ["welcome", "first"],
+        },
+        {
+          id: generateRandomId(),
+          author: "Zenith User 2",
+          content: "Sharing my thoughts on the latest tech trends.",
+          timestamp: new Date().toISOString(),
+          likes: 2,
+          comments: [
+            {
+              id: generateRandomId(),
+              author: "Zenith User 1",
+              content: "Interesting!",
+              timestamp: new Date().toISOString(),
+            },
+          ],
+          tags: ["tech", "trends"],
+        },
+      ];
+      setPosts(initialPosts);
+    }
   }, []);
 
+  useEffect(() => {
+    // Save posts to local storage whenever posts state changes
+    localStorage.setItem('posts', JSON.stringify(posts));
+  }, [posts]);
+
   const handleCreatePost = () => {
-    if (newPostContent.trim() === "") return;
+    if (newPostContent.trim() === "") {
+			toast({
+				title: "Error",
+				description: "Post content cannot be empty.",
+				variant: "destructive",
+			})
+			return;
+		}
+
 
     const tagsArray = newPostTags.split(",").map((tag) => tag.trim());
 
@@ -120,7 +141,9 @@ export default function Home() {
   const handleSharePost = (postId: string) => {
     const postUrl = `${window.location.origin}/post/${postId}`;
     navigator.clipboard.writeText(postUrl);
-    alert("Post link copied to clipboard!");
+		toast({
+			description: "Post link copied to clipboard!",
+		})
   };
 
   const [commentInput, setCommentInput] = useState<Record<string, string>>({});
