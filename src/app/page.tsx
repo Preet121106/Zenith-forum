@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Heart, MessageSquare, Share2, Filter } from 'lucide-react';
+import { Heart, MessageSquare, Share2, Filter, BrainCircuit } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from "@/hooks/use-toast"
@@ -186,7 +186,12 @@ export default function Home() {
       {/* Post Creation */}
       <Card className="mb-6 bg-white shadow-md rounded-lg">
         <CardHeader className="flex flex-col space-y-2">
-          <Label htmlFor="author">Zenith User</Label>
+          <Label htmlFor="author">
+            <div className="flex items-center space-x-2">
+              <BrainCircuit className="h-4 w-4" />
+              <span>Zenith User</span>
+            </div>
+          </Label>
           <Input
             id="author"
             type="text"
@@ -345,3 +350,4 @@ export default function Home() {
     </div>
   );
 }
+
